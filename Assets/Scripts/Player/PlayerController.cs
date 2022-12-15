@@ -1,15 +1,23 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed;
-    private bool isMoving;
-    private Vector2 input;
+    public float moveSpeed;//Velocidad del personaje
+    public LayerMask solidObjectsLayer;//Objetos solidos
+    public LayerMask grassLayer;//Pasto
 
-    // Update is called once per frame
-    void Update()
+    private bool isMoving;//Boolean si el personaje esta en movimiento
+    private Vector2 input;//Input para mover al personaje
+
+    private Animator animator;//Animaciones de movimiento del personaje
+
+    private void Awake() // Genera la animaciones al caminar del personaje
+    {
+        animator = GetComponent<Animator>();
+    }
+    
+    void Update()// Genera el moviento de forma horizontal y vertical del personaje
     {
         if (!isMoving)
         {
@@ -20,16 +28,20 @@ public class PlayerController : MonoBehaviour
 
             if (input != Vector2.zero)
             {
+                animator.SetFloat("moveX", input.x); //Genera las animaciones segun el movimiento en x
+                animator.SetFloat("moveY", input.y); //Genera las animaciones segun el movimiento en y
                 var targetPos = transform.position;
                 targetPos.x += input.x;
                 targetPos.y += input.y;
-
-                StartCoroutine(Move(targetPos));
+                
+                if(IsWalkable(targetPos)) // Comprueba si esta cerca del contorno de un objeto solido
+                    StartCoroutine(Move(targetPos));
             }
         }
+        animator.SetBool("isMoving", isMoving);
     }
-    // Crea el movimiento del personaje en la grilla
-    IEnumerator Move(Vector3 targetPos)
+    
+    IEnumerator Move(Vector3 targetPos)// Crea el movimiento del personaje en la grilla
     {
         isMoving = true;
 
@@ -41,6 +53,27 @@ public class PlayerController : MonoBehaviour
         transform.position = targetPos;
 
         isMoving = false;
+
+        CheckForEncounters();
     }
 
+    private bool IsWalkable(Vector3 targetPos)//Crea el limite entre los objetos solidos y el personaje
+    {
+        if(Physics2D.OverlapCircle(targetPos, 0.2f, solidObjectsLayer) != null )
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private void CheckForEncounters()//Genera los encuentros con los pokemones
+    {
+        if(Physics2D.OverlapCircle(transform.position, 0.2f, grassLayer) != null )
+        {
+            if(UnityEngine.Random.Range(1,101) <= 10)
+            {
+                Debug.Log("Encontraste un pokemon");
+            }
+        }
+    }
 }
