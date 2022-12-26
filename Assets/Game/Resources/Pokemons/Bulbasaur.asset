@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c01880a9026ad844a035ab3b2bb4549, type: 3}
   m_Name: Bulbasaur
   m_EditorClassIdentifier: 
-  name: 
+  name: Bulbasaur
   description: 
   frontSprite: {fileID: 21300000, guid: 0f37bf3cf5680a64d863b5f155b2a597, type: 3}
   backSprite: {fileID: 21300000, guid: aacaae602a38f884ab9e02e43de3736d, type: 3}
@@ -24,3 +24,10 @@ MonoBehaviour:
   spAttack: 65
   spDefense: 65
   speed: 45
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 1def9a30b6c3e5443b115ee65c154bf9, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 7f57f49844680f9439c72351182df9b3, type: 2}
+    level: 4
+  - moveBase: {fileID: 11400000, guid: 4996f7e3c5e587146ac96cd99afe3f02, type: 2}
+    level: 7
